@@ -44,5 +44,50 @@
     },
     {
         "name": "Kensington and Chelsea"
+    },
+    {
+        "name": "Kingston Upon Thames"
+    },
+    {
+        "name": "Lambeth"
+    },
+    {
+        "name": "Lewisham"
+    },
+    {
+        "name": "Merton"
+    },
+    {
+        "name": "Waltham_Forest"
+    },
+    {
+        "name": "Wandsworth"
+    },
+    {
+        "name": "Harrow"
+    },
+    {
+        "name": "Hammersmith and Fulham"
+    },
+    {
+        "name": "Hackney"
+    },
+    {
+        "name": "Enfield"
+    },
+    {
+        "name": "Ealing"
+    },
+    {
+        "name": "Croydon"
+    },
+    {
+        "name": "City of London Corporation"
+    },
+    {
+        "name": "Bromley"
+    },
+    {
+        "name": "Barnet"
     }
 ]

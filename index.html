@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+    crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+    crossorigin=""></script>
+    <script src="https://unpkg.com/leaflet-providers@latest/leaflet-providers.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <style>
+        #map { height: 100vh; }
+        body {
+            margin: 0;
+        }
+        .my-label {
+            background-color: rgba(0,0,0,0);
+            border: none;
+            box-shadow: none;
+            color: rgb(31, 31, 35);
+            font-family: 'Noto Sans', serif;
+            font-weight: 600;
+            text-shadow: 0px 0px 2px rgb(255, 255, 255);
+        }
+
+        /* .leaflet-tooltip-top::before, .leaflet-tooltip-bottom::before, .leaflet-tooltip-left::before, .leaflet-tooltip-right::before {
+            background-color:  ;
+        } */
+        #regions {
+            position: relative;
+            transform: translate(5px,5px);
+            background-color: rgb(95,95,95,0.8);
+            width: max(10%, 18em);
+            height: 98%;
+            z-index: 1000;
+        }
+
+        ul {
+            list-style-type: none;
+            font-family: 'Noto Sans', serif;
+            font-weight: 500;
+            padding: 5px;
+            color: whitesmoke;
+        }
+    </style>
+</head>
+<body>
+    <div id="map">
+        <div id="regions">
+            <ul id="regionlist">
+            </ul>
+        </div>
+    </div>
+    
+    <script>
+        var map = L.map('map', {zoomControl: false}).setView([51.505, -0.09], 13);
+
+        L.control.zoom({
+            position: 'bottomright'
+        }).addTo(map);
+
+        L.tileLayer.provider('CartoDB.Voyager').addTo(map);
+        var CartoDB_Voyager = L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+            subdomains: 'abcd',
+            maxZoom: 20
+        });
+
+        var fiveIcon = L.icon({
+            iconUrl: 'icons/five.png',
+
+            iconSize:     [30, 30], // size of the icon
+            shadowSize:   [0, 0], // size of the shadow
+            iconAnchor:   [15, 30], // point of the icon which will correspond to marker's location
+            shadowAnchor: [4, 62],  // the same for the shadow
+            popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+        });
+        var fourIcon = L.icon({
+            iconUrl: 'icons/four.png',
+
+            iconSize:     [25, 25], // size of the icon
+            shadowSize:   [0, 0], // size of the shadow
+            iconAnchor:   [17, 25], // point of the icon which will correspond to marker's location
+            shadowAnchor: [4, 62],  // the same for the shadow
+            popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+        });
+        var threeIcon = L.icon({
+            iconUrl: 'icons/three.png',
+
+            iconSize:     [20, 20], // size of the icon
+            shadowSize:   [0, 0], // size of the shadow
+            iconAnchor:   [10, 20], // point of the icon which will correspond to marker's location
+            shadowAnchor: [4, 62],  // the same for the shadow
+            popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+        });
+        var twoIcon = L.icon({
+            iconUrl: 'icons/two.png',
+
+            iconSize:     [20, 20], // size of the icon
+            shadowSize:   [0, 0], // size of the shadow
+            iconAnchor:   [10, 20], // point of the icon which will correspond to marker's location
+            shadowAnchor: [4, 62],  // the same for the shadow
+            popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+        });
+        var oneIcon = L.icon({
+            iconUrl: 'icons/one.png',
+
+            iconSize:     [20, 20], // size of the icon
+            shadowSize:   [0, 0], // size of the shadow
+            iconAnchor:   [10, 20], // point of the icon which will correspond to marker's location
+            shadowAnchor: [4, 62],  // the same for the shadow
+            popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+        });
+        var zeroIcon = L.icon({
+            iconUrl: 'icons/zero.png',
+
+            iconSize:     [20, 20], // size of the icon
+            shadowSize:   [0, 0], // size of the shadow
+            iconAnchor:   [10, 20], // point of the icon which will correspond to marker's location
+            shadowAnchor: [4, 62],  // the same for the shadow
+            popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+        });
+        var inspectionIcon = L.icon({
+            iconUrl: 'icons/inspection.png',
+
+            iconSize:     [20, 20], // size of the icon
+            shadowSize:   [0, 0], // size of the shadow
+            iconAnchor:   [10, 20], // point of the icon which will correspond to marker's location
+            shadowAnchor: [4, 62],  // the same for the shadow
+            popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+        });
+
+        let makeBusinessName = (name) => {
+            return name.toLowerCase().replace("ltd", "").toUpperCase();
+        }
+
+        let tooltipThreshold = 16;
+        let overlappingTextMap = new Map();
+
+        (async () => {
+            let placesArr = await (await fetch("datasets/index.json")).json();
+            let i = 0;
+            for (let place of placesArr) {
+                i++;
+                let element = document.createElement("li");
+
+                element.innerHTML = `<label for="ox-${i}"><input type="checkbox" ${place.name == "Brent" ? "checked" : ""} name="${place.name}" id="ox-${i}" />${place.name}</label>`;
+                document.getElementById("regionlist").append(element);
+                let otherCheckbox = document.getElementById(`ox-${i}`);
+
+                otherCheckbox.addEventListener("change", () => {
+                    if (otherCheckbox.checked) {
+                        loadMarkers(place.name.replaceAll(" ", "_"));
+                    } else {
+                        unloadMarkers(place.name.replaceAll(" ", "_"));
+                    }
+                    console.log("changed!");
+                });
+            }
+        })();
+
+        let loadedMarkers = new Map();
+
+        let loadMarkers = (async (place) => {
+            var dataset = await (await fetch(`datasets/${place}.xml`)).text();
+            var parser = new DOMParser();
+            var xmlDoc = parser.parseFromString(dataset,"text/xml");
+            let arr = [];
+            loadedMarkers.set(place, arr);
+            for (let establishment of xmlDoc.getElementsByTagName("EstablishmentDetail")) {
+                // console.log();
+                try {
+                    let estType = establishment.querySelector("BusinessTypeID").innerHTML;
+                    let shouldShow = ["1", "7841", "7844"].includes(estType);
+                    let grade = establishment.querySelector("RatingValue").innerHTML;
+                    let myIcon = grade == "5" ? fiveIcon : (grade == "4" ? fourIcon : grade == "3" ? threeIcon : (grade == "2" ? twoIcon : grade == "1" ? oneIcon : grade == "0" ? zeroIcon : inspectionIcon));
+                    if (myIcon && shouldShow) {
+                        let pos = [establishment.querySelector("Geocode Latitude").innerHTML, establishment.querySelector("Geocode Longitude").innerHTML];
+
+                        let marker = L.marker(pos, {icon: myIcon, permanent: false});
+                        if (grade == "5") {
+                            let posThing = overlappingTextMap.get(pos[0]);
+                            if (!posThing) {
+                                posThing = new Map();
+                                overlappingTextMap.set(pos[0], posThing);
+                            }
+                            posThing.set(pos[1], (posThing.get(pos[1]) ?? 0) + 1);
+                            let val = posThing.get(pos[1]) - 1;
+                            marker.bindTooltip(makeBusinessName(establishment.querySelector("BusinessName").innerHTML), {permanent: map.getZoom() >= tooltipThreshold, className: "my-label", offset: [0, val * 11] });
+                        }
+                        marker.on("click", () => {
+                            map.panTo(pos);
+                        })
+                        marker.addTo(map);
+                        arr.push(marker);
+                    }
+                } catch (e) {
+                    console.warn("Non-functional Lat/Long for", establishment.querySelector("LocalAuthorityBusinessID").innerHTML)
+                }
+            }
+            loadedMarkers.set(place, arr);
+            console.log(loadedMarkers.get(place));
+        });
+
+        loadMarkers("Brent");
+        
+        let unloadMarkers = (async (place) => {
+            loadedMarkers.get(place).forEach(element => {
+                element.remove();
+                console.log("removed");
+            });
+            loadedMarkers.set(place, []);
+        });
+        
+        var lastZoom;
+        map.on('zoomend', function() {
+            var zoom = map.getZoom();
+            console.log(zoom);
+            if (zoom < tooltipThreshold /*&& (!lastZoom || lastZoom >= tooltipThreshold)*/) {
+                map.eachLayer(function(l) {
+                    if (l.getTooltip()) {
+                        var tooltip = l.getTooltip();
+                        l.unbindTooltip().bindTooltip(tooltip, {
+                            permanent: false
+                        })
+                    }
+                })
+            } else if (zoom >= tooltipThreshold && (!lastZoom || lastZoom < tooltipThreshold)) {
+                map.eachLayer(function(l) {
+                    if (l.getTooltip()) {
+                        var tooltip = l.getTooltip();
+                        l.unbindTooltip().bindTooltip(tooltip, {
+                            permanent: true
+                        })
+                    }
+                });
+            }
+            lastZoom = zoom;
+        })
+
+    </script>
+</body>
+</html>
+

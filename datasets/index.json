@@ -1,0 +1,48 @@
+[
+    {
+        "name": "Barking and Dagenham",
+        "latlon": [51.540210002770955, 0.14816511662932086]
+    },
+    {
+        "name": "Greenwich",
+        "latlon": [51.49336664971432, 0.009795628216272266]
+    },
+    {
+        "name": "Westminster",
+        "latlon": [51.49749611031516, -0.13562185610035335]
+    },
+    {
+        "name": "Camden",
+        "latlon": [51.538995266389726, -0.14253461497659387]
+    },
+    {
+        "name": "Southwark"
+    },
+    {
+        "name": "Sutton"
+    },
+    {
+        "name": "Tower Hamlets"
+    },
+    {
+        "name": "Brent"
+    },
+    {
+        "name": "Haringey"
+    },
+    {
+        "name": "Havering"
+    },
+    {
+        "name": "Islington"
+    },
+    {
+        "name": "Hounslow"
+    },
+    {
+        "name": "Hillingdon"
+    },
+    {
+        "name": "Kensington and Chelsea"
+    }
+]

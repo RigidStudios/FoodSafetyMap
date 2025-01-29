@@ -16,9 +16,15 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
     <style>
-        #map { height: 100vh; }
+        #map { height: 100vh; width: 80vw; transform: translateX(20vw);  overflow:hidden; };
+        html {
+            overflow:hidden;
+        }
         body {
             margin: 0;
+            padding: 0;
+            overflow:hidden;
+            
         }
         .my-label {
             background-color: rgba(0,0,0,0);
@@ -31,14 +37,17 @@
         }
 
         /* .leaflet-tooltip-top::before, .leaflet-tooltip-bottom::before, .leaflet-tooltip-left::before, .leaflet-tooltip-right::before {
-            background-color:  ;
+            background-color: ;
         } */
         #regions {
             position: relative;
-            transform: translate(5px,5px);
+            transform: translate(5px,-5px);
+            padding: 0px;
+            margin: 0px;
             background-color: rgb(95,95,95,0.8);
-            width: max(10%, 18em);
-            height: 98%;
+            width: min(max(10%, 18em), 25vw);
+            height: 75vh;
+            overflow-y: scroll;
             z-index: 1000;
         }
 
@@ -202,11 +211,11 @@
                         arr.push(marker);
                     }
                 } catch (e) {
-                    console.warn("Non-functional Lat/Long for", establishment.querySelector("LocalAuthorityBusinessID").innerHTML)
+                    // console.warn("Non-functional Lat/Long for", establishment.querySelector("LocalAuthorityBusinessID").innerHTML)
                 }
             }
             loadedMarkers.set(place, arr);
-            console.log(loadedMarkers.get(place));
+            // console.log(loadedMarkers.get(place));
         });
 
         loadMarkers("Brent");
@@ -222,7 +231,7 @@
         var lastZoom;
         map.on('zoomend', function() {
             var zoom = map.getZoom();
-            console.log(zoom);
+            // console.log(zoom);
             if (zoom < tooltipThreshold /*&& (!lastZoom || lastZoom >= tooltipThreshold)*/) {
                 map.eachLayer(function(l) {
                     if (l.getTooltip()) {

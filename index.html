@@ -40,12 +40,12 @@
             background-color: ;
         } */
         #regions {
-            position: relative;
-            transform: translate(5px,-5px);
+            position: absolute;
+            transform: translate(-21vw,0px); 
             padding: 0px;
             margin: 0px;
             background-color: rgb(95,95,95,0.8);
-            width: min(max(10%, 18em), 25vw);
+            width: 20vw;
             height: 75vh;
             overflow-y: scroll;
             z-index: 1000;
@@ -58,14 +58,20 @@
             padding: 5px;
             color: whitesmoke;
         }
+
+        #button {
+            z-index: 10000;
+            position: absolute;
+        }
     </style>
 </head>
 <body>
+    <div id="regions">
+        <ul id="regionlist">
+        </ul>
+    </div>
     <div id="map">
-        <div id="regions">
-            <ul id="regionlist">
-            </ul>
-        </div>
+        <div id="button">ARROW</div>
     </div>
     
     <script>
@@ -253,7 +259,18 @@
             }
             lastZoom = zoom;
         })
+    
+        let toggle = false;
+        let progress = 1;
+        let anim;
+        anim = () => {
+            document.getElementById("map").style.width = `${progress * 50 + 50}vw`;
+            document.getElementById("map").style.transform = `translateX(${100 - (progress * 50 + 50)}vw)`;
 
+            requestAnimationFrame(anim);
+        }
+
+        requestAnimationFrame(anim)
     </script>
 </body>
 </html>
